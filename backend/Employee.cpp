@@ -2,8 +2,7 @@
 
 int Employee::totalEmployees = 0;
 
-Employee::Employee()
-    : employeeId(""), employeeName(""), department(""), designation(""),
+Employee::Employee(): employeeId(""), employeeName(""), department(""), designation(""),
       baseSalary(0.0), bonus(0.0), allowance(0.0), photoPath("") {
     ++totalEmployees;
 }

@@ -284,6 +284,34 @@ CROW_ROUTE(app, "/api/employees/delete/<string>")
         return errorResponse(500, e.what());
     }
 });
+CROW_ROUTE(app, "/api/employees")
+.methods("POST"_method, "OPTIONS"_method)
+([&](const crow::request& req)
+{
+    if (req.method == "OPTIONS"_method)
+        return jsonResponse(200, "{}");
+
+    try
+    {
+        auto body = crow::json::load(req.body);
+
+        if (!body)
+            return errorResponse(400, "Invalid JSON");
+
+        auto emp = createEmployeeFromJson(body);
+
+        payrollSystem.addEmployee(std::move(emp));
+
+        return jsonResponse(
+            201,
+            "{\"success\":true,\"message\":\"Employee added successfully\"}"
+        );
+    }
+    catch (const std::exception& e)
+    {
+        return errorResponse(500, e.what());
+    }
+});
 //-------------------------
 
     CROW_ROUTE(app, "/api/payroll/<string>").methods("GET"_method)
